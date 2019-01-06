@@ -220,6 +220,27 @@ public final class UaaTokenUtils {
         return UriComponentsBuilder.fromUri(uri).host(hostToUse).pathSegment("oauth/token").build().toUriString();
     }
 
+    
+
+
+    public static String constructIssuerEndpointUrl(String issuer) throws URISyntaxException {
+          URI uri;
+          if (!IdentityZoneHolder.isUaa()) {
+              String zone_issuer = IdentityZoneHolder.get().getConfig() != null ? IdentityZoneHolder.get().getConfig().getIssuer() : null;
+              if(zone_issuer != null) {
+                  uri = validateIssuer(zone_issuer);
+                  return UriComponentsBuilder.fromUri(uri).toUriString();
+              }
+          }
+          uri = validateIssuer(issuer);
+          String hostToUse = uri.getHost();
+          if (hasText(IdentityZoneHolder.get().getSubdomain())) {
+              hostToUse = IdentityZoneHolder.get().getSubdomain() + "." + hostToUse;
+          }
+          return UriComponentsBuilder.fromUri(uri).host(hostToUse).toUriString();
+      }
+
+    
     private static URI validateIssuer(String issuer) throws URISyntaxException {
         try {
             new URL(issuer);

@@ -17,7 +17,7 @@ public class OpenIdConnectEndpoints {
 
     @RequestMapping(value = {"/.well-known/openid-configuration", "/oauth/token/.well-known/openid-configuration"})
     public ResponseEntity<OpenIdConfiguration> getOpenIdConfiguration(HttpServletRequest request) throws URISyntaxException {
-        OpenIdConfiguration conf = new OpenIdConfiguration(getServerContextPath(request), getTokenEndpoint());
+        OpenIdConfiguration conf = new OpenIdConfiguration(getServerContextPath(request), getIssuerEndpoint());
         return new ResponseEntity<>(conf, OK);
     }
 
@@ -30,6 +30,11 @@ public class OpenIdConnectEndpoints {
         return UaaTokenUtils.constructTokenEndpointUrl(issuer);
     }
 
+    public String getIssuerEndpoint() throws URISyntaxException {
+        return UaaTokenUtils.constructIssuerEndpointUrl(issuer);
+    }
+    
+    
     public String getIssuer() {
         return issuer;
     }
