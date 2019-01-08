@@ -24,6 +24,17 @@ public class TokenEndpointBuilder {
         }
     }
 
+    
+    public String getIssuerEndpointUrl() {
+        try {
+            return UaaTokenUtils.constructIssuerEndpointUrl(issuer);
+        } catch (URISyntaxException e) {
+            logger.error("Failed to get token endpoint for issuer " + issuer, e);
+            throw new IllegalArgumentException(e);
+        }
+    }
+    
+    
     public String getIssuer() {
         return issuer;
     }
